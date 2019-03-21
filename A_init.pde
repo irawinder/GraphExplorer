@@ -4,7 +4,34 @@ void initFile(){
   Table file = loadTable("data/crs11noid-3-1-19_plusFAC.csv", "header");
   
   // Reference Table for Course Information
-  Table info = loadTable("data/courseinfo.csv", "header");
+  //Table info = loadTable("data/courseinfo.csv", "header");
+  Table info = loadTable("data/11_6_Course_Instructors_PLUS.csv", "header");
+  
+  // Add all subjects to arraylist of subjects
+  subjects = new ArrayList<Subject>();
+  for (int i=0; i<info.getRowCount(); i++) {
+    
+    String name    = "" + info.getString(i, 4);
+    String number    = "" + info.getString(i, 1);
+    String instructor = "" + info.getString(i, 2);
+    String semester   = "" + info.getString(i, 8);
+    String requirement   = "" + info.getString(i, 9);
+    int units = info.getInt(i, 7);
+    Subject current = new Subject(name, number, instructor, semester, requirement, units);
+    
+    // Check for repeat subject
+    boolean repeat = false;
+    for (Subject s: subjects) {
+      if (s.name.equals(current.name)) {
+        repeat = true;
+        break;
+      }
+    }
+    // If subject not already in list, add to end of list with current subject as their first
+    if (!repeat) {
+      subjects.add(current);
+    }
+  }
   
   // Add all of these people to an array list of People, students
   students = new ArrayList<Student>();
